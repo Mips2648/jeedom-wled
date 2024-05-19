@@ -11,13 +11,15 @@ $eqLogics = eqLogic::byType($plugin->getId());
 <div class="row row-overflow">
 	<!-- Page d'accueil du plugin -->
 	<div class="col-xs-12 eqLogicThumbnailDisplay">
-		<legend><i class="fas fa-cog"></i>  {{Gestion}}</legend>
+		<legend><i class="fas fa-cog"></i> {{Gestion}}</legend>
 		<!-- Boutons de gestion du plugin -->
 		<div class="eqLogicThumbnailContainer">
 			<div class="cursor logoPrimary eqLogicAction" data-action="discover">
 				<i class="fas fa-bullseye"></i>
 				<br>
-				<span><center>{{Découverte}}</center></span>
+				<span>
+					<center>{{Découverte}}</center>
+				</span>
 			</div>
 			<div class="cursor eqLogicAction logoPrimary" data-action="add">
 				<i class="fas fa-plus-circle"></i>
@@ -46,7 +48,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
 			echo '<div class="eqLogicThumbnailContainer">';
 			foreach ($eqLogics as $eqLogic) {
 				$opacity = ($eqLogic->getIsEnable()) ? '' : 'disableCard';
-				echo '<div class="eqLogicDisplayCard cursor '.$opacity.'" data-eqLogic_id="' . $eqLogic->getId() . '">';
+				echo '<div class="eqLogicDisplayCard cursor ' . $opacity . '" data-eqLogic_id="' . $eqLogic->getId() . '">';
 				echo '<img src="' . $plugin->getPathImgIcon() . '">';
 				echo '<br>';
 				echo '<span class="name">' . $eqLogic->getHumanName(true, true) . '</span>';
@@ -64,7 +66,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
 			<span class="input-group-btn">
 				<!-- Les balises <a></a> sont volontairement fermées à la ligne suivante pour éviter les espaces entre les boutons. Ne pas modifier -->
 				<a class="btn btn-sm btn-default eqLogicAction roundedLeft" data-action="configure"><i class="fas fa-cogs"></i><span class="hidden-xs"> {{Configuration avancée}}</span>
-				</a><a class="btn btn-sm btn-default eqLogicAction" data-action="copy"><i class="fas fa-copy"></i><span class="hidden-xs">  {{Dupliquer}}</span>
+				</a><a class="btn btn-sm btn-default eqLogicAction" data-action="copy"><i class="fas fa-copy"></i><span class="hidden-xs"> {{Dupliquer}}</span>
 				</a><a class="btn btn-sm btn-success eqLogicAction" data-action="save"><i class="fas fa-check-circle"></i> {{Sauvegarder}}
 				</a><a class="btn btn-sm btn-danger eqLogicAction roundedRight" data-action="remove"><i class="fas fa-minus-circle"></i> {{Supprimer}}
 				</a>
@@ -93,7 +95,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="col-sm-4 control-label" >{{Objet parent}}</label>
+								<label class="col-sm-4 control-label">{{Objet parent}}</label>
 								<div class="col-sm-6">
 									<select id="sel_object" class="eqLogicAttr form-control" data-l1key="object_id">
 										<option value="">{{Aucun}}</option>
@@ -132,13 +134,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
 							<div class="form-group">
 								<label class="col-sm-3 control-label">{{Adresse IP}}</label>
 								<div class="col-sm-7">
-									<input type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="ip_address" placeholder="{{192.168.x.x}}"/>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="col-sm-3 control-label">{{Segment}}</label>
-								<div class="col-sm-7">
-									<input type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="segment" placeholder="0"/>
+									<input type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="ip_address" placeholder="{{192.168.x.x}}" />
 								</div>
 							</div>
 							<!-- Champ de saisie du cron d'auto-actualisation + assistant cron -->
@@ -169,10 +165,10 @@ $eqLogics = eqLogic::byType($plugin->getId());
 								</thead>
 								<tbody>
 								</tbody>
-                            </table>
+							</table>
 							<div class="form-group">
 								<div class="text-center">
-									<img name="icon_visu" src="<?= $plugin->getPathImgIcon(); ?>" style="max-width:160px;"/>
+									<img name="icon_visu" src="<?= $plugin->getPathImgIcon(); ?>" style="max-width:160px;" />
 								</div>
 							</div>
 						</div>
@@ -207,6 +203,6 @@ $eqLogics = eqLogic::byType($plugin->getId());
 </div><!-- /.row row-overflow -->
 
 <!-- Inclusion du fichier javascript du plugin (dossier, nom_du_fichier, extension_du_fichier, id_du_plugin) -->
-<?php include_file('desktop', 'wled', 'js', 'wled');?>
+<?php include_file('desktop', 'wled', 'js', 'wled'); ?>
 <!-- Inclusion du fichier javascript du core - NE PAS MODIFIER NI SUPPRIMER -->
-<?php include_file('core', 'plugin.template', 'js');?>
+<?php include_file('core', 'plugin.template', 'js'); ?>

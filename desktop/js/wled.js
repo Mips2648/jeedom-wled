@@ -24,38 +24,37 @@ $("#table_cmd").sortable({
   forcePlaceholderSize: true
 })
 
-function printEqLogicHelper(label,name,_eqLogic){
-	var trm = '<tr><td class="col-sm-4"><span style="font-size : 1em;">'+label+'</span></td><td><span class="label label-default" style="font-size : 1em;"> <span class="eqLogicAttr" data-l1key="configuration" data-l2key="'+name+'"></span></span></td></tr>';
-	
-	$('#table_infoseqlogic tbody').append(trm);
-	$('#table_infoseqlogic tbody tr:last').setValues(_eqLogic, '.eqLogicAttr');
+function printEqLogicHelper(label, name, _eqLogic) {
+  var trm = '<tr><td class="col-sm-4"><span style="font-size : 1em;">' + label + '</span></td><td><span class="label label-default" style="font-size : 1em;"> <span class="eqLogicAttr" data-l1key="configuration" data-l2key="' + name + '"></span></span></td></tr>';
+
+  $('#table_infoseqlogic tbody').append(trm);
+  $('#table_infoseqlogic tbody tr:last').setValues(_eqLogic, '.eqLogicAttr');
 }
 
 // fonction executée par jeedom lors de l'affichage des details d'un eqlogic
 function printEqLogic(_eqLogic) {
-	if (!isset(_eqLogic)) {
-		var _eqLogic = {configuration: {}};
-	}
-	if (!isset(_eqLogic.configuration)) {
-		_eqLogic.configuration = {};
-	}
-	$('#table_infoseqlogic tbody').empty();
-    printEqLogicHelper("{{Version WLED}}","version",_eqLogic);
-	printEqLogicHelper("{{Nombre total de leds}}","ledscount",_eqLogic);
-	printEqLogicHelper("{{Nombre de leds du segment}}","segledscount",_eqLogic);
-	printEqLogicHelper("{{Puissance maximum (mA)}}","ledsmaxpwr",_eqLogic);
-	printEqLogicHelper("{{Nombre d'effets}}","ledsfxcount",_eqLogic);
-	printEqLogicHelper("{{Nombre de palettes}}","ledspalcount",_eqLogic);  
+  if (!isset(_eqLogic)) {
+    var _eqLogic = { configuration: {} };
+  }
+  if (!isset(_eqLogic.configuration)) {
+    _eqLogic.configuration = {};
+  }
+  $('#table_infoseqlogic tbody').empty();
+  printEqLogicHelper("{{Version WLED}}", "version", _eqLogic);
+  printEqLogicHelper("{{Nombre total de leds}}", "ledscount", _eqLogic);
+  printEqLogicHelper("{{Puissance maximum (mA)}}", "ledsmaxpwr", _eqLogic);
+  printEqLogicHelper("{{Nombre d'effets}}", "ledsfxcount", _eqLogic);
+  printEqLogicHelper("{{Nombre de palettes}}", "ledspalcount", _eqLogic);
 }
 
 /* Fonction permettant l'affichage des commandes dans l'équipement */
 function addCmdToTable(_cmd) {
   if (!isset(_cmd)) {
-    var _cmd = {configuration: {}}
-   }
-   if (!isset(_cmd.configuration)) {
+    var _cmd = { configuration: {} }
+  }
+  if (!isset(_cmd.configuration)) {
     _cmd.configuration = {}
-   }
+  }
   var tr = '<tr class="cmd" data-cmd_id="' + init(_cmd.id) + '">'
   tr += '<td class="hidden-xs">'
   tr += '<span class="cmdAttr" data-l1key="id"></span>'
@@ -84,50 +83,50 @@ function addCmdToTable(_cmd) {
   tr += '<input class="tooltips cmdAttr form-control input-sm" data-l1key="unite" placeholder="Unité" title="{{Unité}}" style="width:30%;max-width:80px;display:inline-block;margin-right:2px;">'
   tr += '</div>'
   tr += '</td>'
-   tr += '<td>';
-   tr += '<span class="cmdAttr" data-l1key="htmlstate"></span>'; 
-   tr += '</td>';
+  tr += '<td>';
+  tr += '<span class="cmdAttr" data-l1key="htmlstate"></span>';
+  tr += '</td>';
   tr += '<td>'
-   if (is_numeric(_cmd.id)) {
+  if (is_numeric(_cmd.id)) {
     tr += '<a class="btn btn-default btn-xs cmdAction" data-action="configure"><i class="fas fa-cogs"></i></a> '
     tr += '<a class="btn btn-default btn-xs cmdAction" data-action="test"><i class="fas fa-rss"></i> Tester</a>'
-   }
-   tr += '<i class="fas fa-minus-circle pull-right cmdAction cursor" data-action="remove" title="{{Supprimer la commande}}"></i></td>'
+  }
+  tr += '<i class="fas fa-minus-circle pull-right cmdAction cursor" data-action="remove" title="{{Supprimer la commande}}"></i></td>'
   tr += '</tr>'
   $('#table_cmd tbody').append(tr)
   var tr = $('#table_cmd tbody tr').last()
   jeedom.eqLogic.buildSelectCmd({
-     id:  $('.eqLogicAttr[data-l1key=id]').value(),
-     filter: {type: 'info'},
-     error: function (error) {
-      $('#div_alert').showAlert({message: error.message, level: 'danger'})
-     },
-     success: function (result) {
+    id: $('.eqLogicAttr[data-l1key=id]').value(),
+    filter: { type: 'info' },
+    error: function (error) {
+      $('#div_alert').showAlert({ message: error.message, level: 'danger' })
+    },
+    success: function (result) {
       tr.find('.cmdAttr[data-l1key=value]').append(result)
       tr.setValues(_cmd, '.cmdAttr')
       jeedom.cmd.changeType(tr, init(_cmd.subType))
-     }
-   })
- }
+    }
+  })
+}
 
-	$('.eqLogicAction[data-action=discover]').on('click', function (e) {
-        $.ajax({// fonction permettant de faire de l'ajax
-            type: "POST", // methode de transmission des données au fichier php
-            url: "plugins/wled/core/ajax/wled.ajax.php", // url du fichier php
-            data: {
-            	action: "discoverWled",
-            },
-            dataType: 'json',
-            error: function (request, status, error) {
-            	handleAjaxError(request, status, error);
-            },
-            success: function (data) { // si l'appel a bien fonctionné
-				if (data.state != 'ok') {
-					$('#div_alert').showAlert({message: data.result, level: 'danger'});
-					return;
-				}
-				$('#div_alert').showAlert({message: '{{Découverte réussie}}', level: 'success'});
-				location.reload();
-          }
-        });
-    });
+$('.eqLogicAction[data-action=discover]').on('click', function (e) {
+  $.ajax({// fonction permettant de faire de l'ajax
+    type: "POST", // methode de transmission des données au fichier php
+    url: "plugins/wled/core/ajax/wled.ajax.php", // url du fichier php
+    data: {
+      action: "discoverWled",
+    },
+    dataType: 'json',
+    error: function (request, status, error) {
+      handleAjaxError(request, status, error);
+    },
+    success: function (data) { // si l'appel a bien fonctionné
+      if (data.state != 'ok') {
+        $('#div_alert').showAlert({ message: data.result, level: 'danger' });
+        return;
+      }
+      $('#div_alert').showAlert({ message: '{{Découverte réussie}}', level: 'success' });
+      location.reload();
+    }
+  });
+});
